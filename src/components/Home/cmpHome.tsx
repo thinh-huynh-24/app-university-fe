@@ -1,10 +1,11 @@
 "use client";
 import { useSession } from "next-auth/react";
 import MainHome from "./bodyHome/mainHome";
-import NavigateHome from "../header/header";
+import Header from "../header/header";
 import Loading from "../Loadingpage/loading";
 import { useEffect, useState } from "react";
 import { useThemeContext } from "@/library/ThemeProvider";
+import Navigate from "../navigate/navigate";
 
 function CmpHome() {
   const { status } = useSession({
@@ -17,8 +18,10 @@ function CmpHome() {
         <Loading />
       ) : (
         <div>
-          <NavigateHome />
+          <Header/>
           <MainHome />
+          <Navigate/>
+
         </div>
       )}
     </>
