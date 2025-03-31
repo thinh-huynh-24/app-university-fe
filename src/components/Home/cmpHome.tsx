@@ -17,11 +17,10 @@ function CmpHome() {
       {status === "loading" ? (
         <Loading />
       ) : (
-        <div>
+        <div >
           <Header/>
           <MainHome />
           <Navigate/>
-
         </div>
       )}
     </>

@@ -1,135 +1,71 @@
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
+import { device } from "@/components/data/device";
 
+    function DisplayCard({device}: { device: { id: number, name: string,mode :string,status:boolean,value:number,measurement:string,action:string,startvalue:number,endvalue:number,starttime:string,endtime:string } }) {
+        const [tile,changetile] = useState(device.name);
+        const [number,changenumber] = useState(device.value);
+        const [measurement,changemeasurement] = useState(device.measurement);
+        const [id,changeid] = useState(device.id);
+        const [mode,changemode] = useState(device.mode);
+        const [doing,changedoing] = useState(device.action);
+        const [startparameter,changestartparameter] = useState(device.startvalue);
+        const [endparameter,changeendparameter] = useState(device.endvalue);
+        const [starttime,changestarttime] = useState(device.starttime);
+        const [endtime,changeendtime] = useState(device.endtime);
+        return (
+            <div className="my-3 mx-2 h-[210px] justify-evenly flex gap-3 p-3 bg-mau1 border-mau2 rounded-3xl border-4">
+                <div className="flex flex-col gap-2 justify-evenly text-center w-fit px-1 py-5">
+                    <h2 className="font-josefin font-bold text-xl text-mau3">{tile}</h2>
+                    <div className="font-josefin font-bold text-7xl text-mau3">{number}</div>
+                    <p className="font-josefin font-bold text-sm text-mau3">{measurement}</p>
+                </div>
 
-function Card(){
-    const [tile,changetile] = useState("ÁNH SÁNG");
-    const [number,changenumber] = useState(80);
-    const [measurement,changemeasurement] = useState("W/mm²");
-
-    const [mode,changemode] = useState("TỰ ĐỘNG");
-    const [doing,changedoing] = useState("Giữ ánh sáng trên mức");
-    const [parameter,changeparameter] = useState(50);
-    
-    
-    class CardInfo {
-        tile: string;
-        number: number;
-        measurement: string;
-        mode: string;
-        doing: string;
-        parameter: number;
-
-        
-    
-        constructor(tile: string,
-            number: number,
-            measurement: string,
-            mode: string,
-            doing: string,
-            parameter: number,) {
-            this.tile = tile;
-            this.number = number;
-            this.measurement = measurement;
-            this.mode = mode;
-            this.doing = doing;
-            this.parameter = parameter;
-            
-        }
-
-        gettile(): string {
-            return this.tile;
-        }
-        settile(value: string) {
-            this.tile = value;
-        }
-
-        // Getter & Setter cho number
-        getnumber(): number {
-            return this.number;
-        }
-        setnumber(value: number) {
-            if (value >= 0) {
-                this.number = value;
-            } else {
-                throw new Error("Number must be a positive value.");
-            }
-        }
-
-        // Getter & Setter cho measurement
-        getmeasurement(): string {
-            return this.measurement;
-        }
-        setmeasurement(value: string) {
-            this.measurement = value;
-        }
-
-        // Getter & Setter cho mode
-        getmode(): string {
-            return this.mode;
-        }
-        setmode(value: string) {
-            this.mode = value;
-        }
-
-        // Getter & Setter cho doing
-        getdoing(): string {
-            return this.doing;
-        }
-        setdoing(value: string) {
-            this.doing = value;
-        }
-
-        // Getter & Setter cho parameter
-        getparameter(): number {
-            return this.parameter;
-        }
-        setparameter(value: number) {
-            if (value >= 0) {
-                this.parameter = value;
-            } else {
-                throw new Error("Parameter must be a positive value.");
-            }
-        }
-        
-    }
-    
-    
-            function DisplayCard(card:CardInfo, index: number){
-                return(
-                    <div className=" justify-evenly flex gap-3 p-3 bg-mau1 border-mau2 rounded-3xl border-4">
-                        <div className=" flex flex-col gap-2 justify-evenly text-center  w-fit px-1 py-5">
-                            <h2 className=" font-josefin font-bold text-xl text-mau3 ">{card.tile}</h2>
-                            <div className=" font-josefin font-bold text-7xl text-mau3">{card.number}</div>
-                            <p className="font-josefin font-bold text-sm text-mau3">{card.measurement}</p>
-                        </div>
-            
-                        <div className="flex flex-col gap-2">
-                            <div className="flex flex-col gap-1 justify-evenly px-3 text-center">
-                                <h2 className="font-josefin font-bold text-xl text-mau3 ">{card.mode}</h2>
-                                <p className="font-dosis font-light text-xl text-mau3 ">{card.doing}</p>
-                                <p className="font-dosis font-light text-xl text-mau3 ">{card.parameter} {card.measurement}</p>
-                            </div>
-                            <div className="flex m-auto  w-full py-3 gap-3 rounded-2xl px-5 bg-mau3">
-                                <Image alt='Home' src={'/icon/Setting.svg'} width={24} height={24}/>
-                                <p className="font-josefin font-bold text-xl text-mau1 ">Cài đặt</p>
-                            </div>
-                        </div>
+                <div className="flex flex-col gap-2">
+                    <div className="flex flex-col gap-1 justify-evenly px-3 text-center">
+                        <h2 className="font-josefin font-bold text-xl text-mau3">{mode}</h2>
+                        {device.mode === "Tự động" && (
+                            <>
+                                <p className="font-dosis font-light text-xl text-mau3">{doing} <br/> trong khoảng giá trị </p>
+                                <p className="font-dosis font-light text-xl text-mau3">
+                                    {startparameter} - {endparameter} {measurement}
+                                </p>
+                            </>
+                        )}
+                        {device.mode === "Lên lịch" && (
+                            <>
+                                <p className="font-dosis font-light text-xl text-mau3">{doing} <br/> trong khoảng thời gian </p>
+                                <p className="font-dosis font-light text-xl text-mau3">
+                                    {starttime} - {endtime}
+                                </p>
+                            </>
+                        )}
+                        {device.mode === "Thủ công" && (
+                            <>
+                                <p className="font-dosis font-light text-xl text-mau3">{doing} <br/> theo người dùng điều chỉnh </p>
+                            </>
+                        )}
                     </div>
-                )
-            }
-            
-        const cardList = [
-            new CardInfo("ÁNH SÁNG", 80, "W/mm²", "TỰ ĐỘNG", "Giữ ánh sáng trên mức", 50),
-            new CardInfo("NHIỆT ĐỘ", 35, "°C", "TỰ ĐỘNG", "Duy trì nhiệt độ", 70),
-            new CardInfo("ÁP SUẤT", 120, "kPa", "THỦ CÔNG", "Ổn định áp suất", 90)
-        ];
-            
-    return(
-        <>
-            {cardList.map((card: CardInfo, index: number) => DisplayCard(card, index))}
-        </>
-    );
+                        <Link href={`/deviceSetting/${id}`} className="flex m-auto w-fit py-3 gap-3 rounded-2xl px-5 bg-mau3">
+                            <Image alt="Setting" src={'/icon/Setting.svg'} width={24} height={24} />
+                            <p className="font-josefin font-bold text-xl text-mau1">Cài đặt</p>
+                        </Link>
+                    </div>
+            </div>
+        );
+    }
+
+function Card() {
+        return (
+            <div className="bg-mau3 w-full rounded-t-xl flex flex-col">
+                <>
+                    {device.map((device) => (
+                        <DisplayCard key={device.id} device={device} />
+                    ))}
+                </>
+            </div>
+        );
 
     
 }

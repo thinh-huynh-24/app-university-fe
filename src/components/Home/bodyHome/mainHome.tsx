@@ -18,10 +18,7 @@ function MainHome() {
   return (
     <div className="flex flex-col ">
     <QuickNoti/>
-    <div className="bg-mau3  gap-3 flex flex-col px-3 py-6 rounded-t-3xl">
-      <Card/>
-    </div>
-    
+    <Card/>
     </div>
     
   );
