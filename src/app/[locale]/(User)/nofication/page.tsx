@@ -3,6 +3,11 @@ import Header from "@/components/header/header";
 import { device } from "@/components/data/device";
 import NofiCard from "@/components/nofiCard/nofi";
 
+function getData() {
+    // Simulate fetching data from an API
+    
+}
+
 export default function Nofication() {
     return (
         <div className="h-screen flex flex-col">
