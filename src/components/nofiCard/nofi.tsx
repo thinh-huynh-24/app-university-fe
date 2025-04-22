@@ -1,6 +1,6 @@
 import Image from "next/image"
 
-export default function NofiCard({ device }: { device: any }) {
+export default function NofiCard() {
     const imgsize = 30;
     return(
         <div className="flex bg-mau1 rounded-lg p-3 justify-start gap-2">

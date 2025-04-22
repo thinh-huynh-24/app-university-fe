@@ -38,7 +38,7 @@ function DisplayCard({ device }: { device: DeviceWithLatest }) {
         <div className="font-josefin font-bold text-7xl text-mau3">
           {device.latestValue ?? "N/A"}
         </div>
-        <p className="font-josefin font-bold text-sm text-mau3">°C</p>
+        {/* <p className="font-josefin font-bold text-sm text-mau3">°C</p> */}
       </div>
 
       <div className="flex flex-col gap-2">
@@ -61,46 +61,69 @@ function DisplayCard({ device }: { device: DeviceWithLatest }) {
 export default function Card() {
   const [devices, setDevices] = useState<DeviceWithLatest[]>([]);
 
-  // Initial fetch
   useEffect(() => {
     async function fetchInitialDevices() {
+      const token = localStorage.getItem("access_token"); // Lấy token từ localStorage
+      if (!token) {
+        console.error("Chưa có token, người dùng chưa đăng nhập?");
+        return;
+      }
+  
       try {
-        const res = await fetch("http://localhost:8000/api/v2/devices");
+        const res = await fetch("http://localhost:8000/api/v2/devices", {
+          headers: {
+            Authorization: `Bearer ${token}`, // Gửi token trong header
+          },
+        });
+  
         const rawData = await res.json();
         console.log("Thiết bị từ API:", rawData);
-
+  
         const devicesWithValue: DeviceWithLatest[] = await Promise.all(
           rawData.data.map(async (dev: any) => {
             const valueRes = await fetch(
-              `http://localhost:8000/api/v2/device-values?deviceId=${dev.id}`
+              `http://localhost:8000/api/v2/device-values?deviceId=${dev.id}`,
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`, // Gửi token để lấy giá trị thiết bị
+                },
+              }
             );
             const valueData = await valueRes.json();
             const latestValue = valueData.data?.[0]?.value ?? null;
-
+  
             return {
               ...dev,
               latestValue,
             };
           })
         );
-
+  
         setDevices(devicesWithValue);
       } catch (err) {
         console.error("Lỗi lấy thiết bị:", err);
       }
     }
-
+  
     fetchInitialDevices();
   }, []);
 
-  // Periodic update of latest values
+  // Lấy latest value định kỳ
   useEffect(() => {
     const interval = setInterval(async () => {
+      const token = localStorage.getItem("access_token");
+      if (!token) return;
+
       try {
         const updatedDevices = await Promise.all(
           devices.map(async (device) => {
             const res = await fetch(
-              `http://localhost:8000/api/v2/device-values?deviceId=${device.id}`
+              `http://localhost:8000/api/v2/device-values?deviceId=${device.id}`,
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`, // ✨ gửi token
+                },
+              }
             );
             const data = await res.json();
             const latestValue = data.data?.[0]?.value ?? null;

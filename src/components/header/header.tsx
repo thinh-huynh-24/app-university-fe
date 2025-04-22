@@ -38,7 +38,7 @@ function Header() {
     const UserIcon = (login : boolean) => {
       if (login) {
         return(
-          <Link href={"/Home"} className="contents"><img src= {userPic} width={40}height={40}/></Link>
+          <Link href={"/login"} className="contents"><img src= {userPic} width={40}height={40}/></Link>
         )
       } else{
         <Link href={"/Home"}><Avatar icon="pi pi-user" size= "large" shape= "square"  /></Link>
